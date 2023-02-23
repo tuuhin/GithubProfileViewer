@@ -1,0 +1,32 @@
+query GitHubRepositoryQuery($username:String!,$count:Int!){
+    user(login:$username) {
+
+        repositories(first: $count, orderBy: {field: UPDATED_AT, direction: DESC}) {
+            nodes {
+                name
+                description
+                issues {
+                    totalCount
+                }
+                languages(first: 3, orderBy: {field: SIZE, direction: DESC}) {
+                    totalSize
+                    edges {
+                        size
+                        node {
+                            name
+                            color
+                        }
+                    }
+                }
+                createdAt
+                diskUsage
+                forkCount
+                url
+                stargazerCount
+            }
+            totalCount
+
+        }
+    }
+}
+

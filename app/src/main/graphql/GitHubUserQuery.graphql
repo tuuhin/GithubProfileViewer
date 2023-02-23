@@ -1,0 +1,30 @@
+query GithubUserQuery($username:String!) {
+    rateLimit{
+        used
+        remaining
+        limit
+        resetAt
+    }
+
+    user(login:$username ){
+        email
+        bio
+        avatarUrl
+        name
+        location
+        createdAt
+        followers{
+            totalCount
+        }
+        following{
+            totalCount
+        }
+        twitterUsername
+        websiteUrl
+        email
+        repositories(first: 1){
+            totalCount
+        }
+
+    }
+}
