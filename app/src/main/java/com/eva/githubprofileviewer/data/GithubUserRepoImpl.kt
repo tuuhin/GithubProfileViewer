@@ -44,13 +44,16 @@ class GithubUserRepoImpl(
                 val model = client
                     .query(GitHubRepositoryQuery(user, count))
                     .execute()
-                    .data?.user?.repositories?.toModel()
-                emit(Resource.Success(data = model))
+                    .data?.user?.repositories
+                emit(Resource.Success(data = model?.toModel()))
             } catch (e: ApolloException) {
+                e.printStackTrace()
                 emit(Resource.Error(message = "Apollo exception occured"))
             } catch (e: HttpRetryException) {
+                e.printStackTrace()
                 emit(Resource.Error(message = "Http retry exception"))
             } catch (e: Exception) {
+                e.printStackTrace()
                 emit(Resource.Error(message = "Unknown Error"))
             }
         }

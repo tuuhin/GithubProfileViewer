@@ -8,7 +8,7 @@ query GitHubRepositoryQuery($username:String!,$count:Int!){
                 issues {
                     totalCount
                 }
-                languages(first: 3, orderBy: {field: SIZE, direction: DESC}) {
+                languages(first: 4, orderBy: {field: SIZE, direction: DESC}) {
                     totalSize
                     edges {
                         size
