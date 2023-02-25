@@ -24,11 +24,13 @@ class GithubUserRepoImpl(
                     .execute().data?.user?.toModel()
                 emit(Resource.Success(data = model))
             } catch (e: ApolloException) {
-                emit(Resource.Error(message = "Apollo exception occured"))
+
+                emit(Resource.Error(message =e.message?: "Apollo exception occured"))
             } catch (e: HttpRetryException) {
-                emit(Resource.Error(message = "Http retry exception"))
+                emit(Resource.Error(message =e.message?: "Http retry exception"))
             } catch (e: Exception) {
-                emit(Resource.Error(message = "Unknown Error"))
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message?:"Unknown Error"))
             }
         }
 

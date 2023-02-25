@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -11,7 +13,7 @@ apollo {
 }
 
 android {
-    namespace =  "com.eva.githubprofileviewer"
+    namespace = "com.eva.githubprofileviewer"
     compileSdk = 33
 
     defaultConfig {
@@ -25,26 +27,36 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+
+
+        buildConfigField("String", "TOKEN", "\"${properties.getProperty("ACCESS_TOKEN")}\"")
     }
 
+
     buildTypes {
+
         getByName("release") {
-            isMinifyEnabled =  false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
-        sourceCompatibility =  JavaVersion.VERSION_1_8
-        targetCompatibility  = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_9
+        targetCompatibility = JavaVersion.VERSION_1_9
     }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        compose =  true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion =  "1.2.0"
+        kotlinCompilerExtensionVersion = "1.2.0"
     }
     packagingOptions {
         resources {
@@ -69,4 +81,14 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.0")
     //apollo
     implementation("com.apollographql.apollo3:apollo-runtime:3.7.4")
+    implementation("androidx.compose.material:material-icons-extended:1.3.1")
+    //navigation compose
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    //di
+    implementation("io.insert-koin:koin-android:3.3.3")
+    implementation ("io.insert-koin:koin-androidx-compose:3.4.2")
+    //coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+
 }
