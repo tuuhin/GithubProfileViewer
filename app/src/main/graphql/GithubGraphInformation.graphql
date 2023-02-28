@@ -1,0 +1,17 @@
+query GithubGraphInformation($username:String!){
+    user(login: $username){
+        repositories(first:100){
+            totalCount
+            edges{
+                node{
+                    name
+                    primaryLanguage{
+                        name
+                        color
+                    }
+                    stargazerCount
+                }
+            }
+        }
+    }
+}
