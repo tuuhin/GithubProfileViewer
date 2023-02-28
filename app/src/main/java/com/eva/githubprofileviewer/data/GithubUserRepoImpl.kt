@@ -1,62 +1,81 @@
 package com.eva.githubprofileviewer.data
 
-import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.exception.ApolloException
-import com.eva.GitHubRepositoryQuery
-import com.eva.GithubUserQuery
-import com.eva.githubprofileviewer.data.mappers.toModel
 import com.eva.githubprofileviewer.domain.models.GitHubRepositoryModel
 import com.eva.githubprofileviewer.domain.models.GitHubUserModel
+import com.eva.githubprofileviewer.domain.models.GithubGraphDataModel
 import com.eva.githubprofileviewer.domain.repository.GitHubUserInfoRepository
 import com.eva.githubprofileviewer.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.IOError
 import java.net.HttpRetryException
 
 class GithubUserRepoImpl(
-    private val client: ApolloClient
+    private val queries: ApolloQueries
 ) : GitHubUserInfoRepository {
-    override suspend fun getUserInfo(user: String): Flow<Resource<GitHubUserModel?>> {
+    override suspend fun getUserInformation(user: String)
+            : Flow<Resource<GitHubUserModel?>> {
         return flow {
             emit(Resource.Loading())
             try {
-                val model = client.query(GithubUserQuery(user))
-                    .execute().data?.user?.toModel()
+                val model = queries.getUser(user)
                 emit(Resource.Success(data = model))
             } catch (e: ApolloException) {
-
-                emit(Resource.Error(message =e.message?: "Apollo exception occured"))
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message ?: "Apollo exception occurred"))
             } catch (e: HttpRetryException) {
-                emit(Resource.Error(message =e.message?: "Http retry exception"))
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message ?: "Http retry exception"))
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(Resource.Error(message = e.message?:"Unknown Error"))
+                emit(Resource.Error(message = e.message ?: "Unknown Error"))
             }
         }
 
     }
 
-    override suspend fun getUserRepoInformation(
+    override suspend fun getRepoInformation(
         user: String,
         count: Int
     ): Flow<Resource<List<GitHubRepositoryModel>?>> {
         return flow {
             emit(Resource.Loading())
             try {
-                val model = client
-                    .query(GitHubRepositoryQuery(user, count))
-                    .execute()
-                    .data?.user?.repositories
-                emit(Resource.Success(data = model?.toModel()))
+                val model = queries.getRepositories(user, count)
+                emit(Resource.Success(data = model))
             } catch (e: ApolloException) {
                 e.printStackTrace()
-                emit(Resource.Error(message = "Apollo exception occured"))
+                emit(Resource.Error(message = e.message ?: "Apollo exception occurred"))
             } catch (e: HttpRetryException) {
                 e.printStackTrace()
-                emit(Resource.Error(message = "Http retry exception"))
+                emit(Resource.Error(message = e.message ?: "Http retry exception"))
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(Resource.Error(message = "Unknown Error"))
+                emit(Resource.Error(message = e.message ?: "Unknown Error"))
+            }
+        }
+    }
+
+    override suspend fun getGraphData(user: String)
+            : Flow<Resource<GithubGraphDataModel?>> {
+        return flow {
+            emit(Resource.Loading())
+            try {
+                val model = queries.getLanguages(user)
+                emit(Resource.Success(data = model))
+            } catch (e: ApolloException) {
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message ?: "Apollo Error Occurred"))
+            } catch (e: HttpRetryException) {
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message ?: "Http retry error"))
+            } catch (e: IOError) {
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message ?: "IO error occurred"))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Resource.Error(message = e.message ?: "Unknown error"))
             }
         }
     }

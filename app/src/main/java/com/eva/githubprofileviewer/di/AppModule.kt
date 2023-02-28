@@ -2,6 +2,8 @@ package com.eva.githubprofileviewer.di
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import com.eva.githubprofileviewer.data.ApolloQueries
+import com.eva.githubprofileviewer.data.ApolloQueriesImpl
 import com.eva.githubprofileviewer.data.GithubUserRepoImpl
 import com.eva.githubprofileviewer.data.interceptor.AuthorizationInterceptor
 import com.eva.githubprofileviewer.domain.repository.GitHubUserInfoRepository
@@ -13,22 +15,27 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    single<OkHttpClient> {
+    single {
         OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor())
             .build()
     }
 
-    single<ApolloClient> {
+    single {
         ApolloClient.Builder()
             .serverUrl(Constants.GITHUB_URL)
             .okHttpClient(get())
             .build()
     }
+
+    single<ApolloQueries> {
+        ApolloQueriesImpl(get())
+    }
+
     single<GitHubUserInfoRepository> {
         GithubUserRepoImpl(get())
     }
-    viewModel<UserInfoViewModel> {
-        UserInfoViewModel(get())
+    viewModel {
+        UserInfoViewModel(get(),get())
     }
 }
