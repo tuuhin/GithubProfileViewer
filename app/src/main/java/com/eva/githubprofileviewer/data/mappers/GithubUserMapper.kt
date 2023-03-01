@@ -8,25 +8,24 @@ import java.time.format.DateTimeFormatter
 
 fun GithubUserQuery.User.toModel(): GitHubUserModel {
 
+    val date = LocalDateTime.parse(
+        createdAt.toString(), DateTimeFormatter.ISO_OFFSET_DATE_TIME
+    ).toLocalDate()
+
     return GitHubUserModel(
         name = name ?: "",
         email = email.ifEmpty { null },
-        avatarUrl = "$avatarUrl",
+        avatarUrl = avatarUrl.toString(),
         followerCount = followers.totalCount,
         followingCount = following.totalCount,
-        createdAt = LocalDateTime.parse(
-            createdAt.toString(),
-            DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        )
-            .toLocalDate(),
+        createdAt = date,
         location = location,
         repoCount = repositories.totalCount,
         bio = bio,
-        login =login,
+        login = login,
         url = url.toString(),
         twitterUserName = twitterUsername,
-        websiteUrl = websiteUrl.toString()
-
+        websiteUrl = websiteUrl?.toString()
 
     )
 }

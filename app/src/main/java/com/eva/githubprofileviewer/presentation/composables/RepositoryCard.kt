@@ -1,10 +1,12 @@
 package com.eva.githubprofileviewer.presentation.composables
 
-import android.graphics.Color as ParserColor
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.ForkRight
@@ -12,22 +14,13 @@ import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eva.githubprofileviewer.domain.models.GitHubRepositoryModel
-import java.text.NumberFormat
+import com.eva.githubprofileviewer.presentation.composables.graphs.LinearLanguageGraph
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,14 +28,18 @@ import java.util.*
 fun RepositoryCard(
     repositoryModel: GitHubRepositoryModel,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    context: Context = LocalContext.current
 ) {
+
     Card(
-        modifier = modifier.padding(10.dp),
+        modifier = modifier
+            .padding(10.dp)
+            .clickable {
+                val uri = Uri.parse(repositoryModel.url)
+                val intent = Intent(Intent.ACTION_VIEW,uri)
+                context.startActivity(intent)
+            },
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
     ) {
         Column(
             modifier = Modifier.padding(10.dp)
@@ -103,28 +100,7 @@ fun RepositoryCard(
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(4.dp, 0.dp)
                 )
-                Divider(modifier = Modifier.padding(4.dp))
-                Canvas(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(15.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                ) {
-                    val totalWidth = size.width
-                    var lastOffset = Offset.Zero
-                    // The gray color will fill the background
-                    drawRect(color = Color.Gray)
-                    for (language in repositoryModel.languages) {
-                        drawRect(
-                            color = Color(ParserColor.parseColor(language.colorCode)),
-                            topLeft = lastOffset,
-                            size = Size(language.percentage * totalWidth, size.height),
-
-                            )
-                        lastOffset = Offset(lastOffset.x + language.percentage * totalWidth, 0f)
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
+                LinearLanguageGraph(repositoryModel.languages)
                 for (language in repositoryModel.languages) {
                     LanguageTags(language)
 

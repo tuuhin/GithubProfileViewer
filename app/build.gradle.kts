@@ -89,6 +89,6 @@ dependencies {
     implementation ("io.insert-koin:koin-androidx-compose:3.4.2")
     //coil
     implementation("io.coil-kt:coil-compose:2.2.2")
-
+    implementation("com.google.accompanist:accompanist-pager:0.29.1-alpha")
 
 }

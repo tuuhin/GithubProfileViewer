@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.eva.githubprofileviewer.domain.models.GitHubUserModel
+import com.eva.githubprofileviewer.utils.toCompactNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,8 +20,7 @@ fun GithubUserSocialDataCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier
-            .padding(4.dp)
+        modifier = modifier.padding(4.dp)
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
@@ -28,7 +28,7 @@ fun GithubUserSocialDataCard(
         ) {
             Text(text = label.uppercase(), style = MaterialTheme.typography.labelLarge)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = count.toString(), style = MaterialTheme.typography.labelMedium)
+            Text(text = count.toCompactNumber(), style = MaterialTheme.typography.labelMedium)
         }
     }
 }
