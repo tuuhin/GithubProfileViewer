@@ -9,9 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Book
-import androidx.compose.material.icons.outlined.ForkRight
-import androidx.compose.material.icons.outlined.Message
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,13 +27,12 @@ fun RepositoryCard(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current
 ) {
-
     Card(
         modifier = modifier
             .padding(10.dp)
             .clickable {
                 val uri = Uri.parse(repositoryModel.url)
-                val intent = Intent(Intent.ACTION_VIEW,uri)
+                val intent = Intent(Intent.ACTION_VIEW, uri)
                 context.startActivity(intent)
             },
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
@@ -72,28 +68,7 @@ fun RepositoryCard(
                 text = "${"Repository Size:".uppercase(Locale.ROOT)} : ${repositoryModel.sizeReadable}",
                 modifier = Modifier.padding(2.dp)
             )
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp, 10.dp)
-            ) {
-                AssociatedIcons(
-                    icon = Icons.Outlined.ForkRight,
-                    label = "Forks",
-                    count = repositoryModel.forksCount
-                )
-                AssociatedIcons(
-                    icon = Icons.Outlined.Star,
-                    label = "Stars",
-                    count = repositoryModel.starsCount,
-                )
-                AssociatedIcons(
-                    icon = Icons.Outlined.Message,
-                    label = "Issues",
-                    count = repositoryModel.issuesCount
-                )
-            }
+            RepositoryAssociatedIconsInfo(repositoryModel = repositoryModel)
             if (repositoryModel.languages.isNotEmpty()) {
                 Text(
                     text = "Languages Composition",

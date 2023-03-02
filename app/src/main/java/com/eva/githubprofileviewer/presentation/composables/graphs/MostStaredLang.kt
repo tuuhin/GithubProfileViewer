@@ -1,7 +1,6 @@
-package com.eva.githubprofileviewer.presentation.composables
+package com.eva.githubprofileviewer.presentation.composables.graphs
 
 import androidx.compose.foundation.BorderStroke
-import android.graphics.Color as ParseColor
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import com.eva.githubprofileviewer.domain.models.StaredLanguageGraphModel
+import com.eva.githubprofileviewer.presentation.composables.LanguageTags
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

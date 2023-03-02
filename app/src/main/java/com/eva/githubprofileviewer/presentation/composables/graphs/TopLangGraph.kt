@@ -1,6 +1,5 @@
-package com.eva.githubprofileviewer.presentation.composables
+package com.eva.githubprofileviewer.presentation.composables.graphs
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import android.graphics.Color as ParserColor
 import androidx.compose.foundation.Canvas
@@ -8,13 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.eva.githubprofileviewer.domain.models.LanguageGraphModel
+import com.eva.githubprofileviewer.presentation.composables.LanguageTags
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,9 +41,6 @@ fun TopLanguageGraph(
                     .padding(10.dp)
             ) {
                 var lastAngle = 270f
-                Log.d("SIZE", size.height.toString())
-                Log.d("SIZE", size.width.toString())
-
                 for (language in languages) {
                     drawArc(
                         color = Color(ParserColor.parseColor(language.languagesModel.colorCode)),
@@ -53,9 +49,7 @@ fun TopLanguageGraph(
                         useCenter = true,
                     )
                     lastAngle += language.percentage * 360
-
                 }
-
             }
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),

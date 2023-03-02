@@ -11,5 +11,10 @@ class GithubGraphDataModel(
 
     val starsPerLangGraphData: List<StaredLanguageGraphModel> =
         langInfoModel.starsGraphData().sortedByDescending { it.percentage }
+
+    val staredRepoInfo: List<GithubLanguageModel> =
+        langInfoModel.filter {
+            it.languagesModel.name.isNotEmpty()
+        }.sortedByDescending { it.starsCount }.take(10)
 }
 

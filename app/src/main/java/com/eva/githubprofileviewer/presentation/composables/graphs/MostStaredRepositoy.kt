@@ -1,4 +1,4 @@
-package com.eva.githubprofileviewer.presentation.composables
+package com.eva.githubprofileviewer.presentation.composables.graphs
 
 import android.util.Log
 import androidx.compose.foundation.Canvas
@@ -7,7 +7,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -22,81 +21,68 @@ fun MostStaredRepositories(
     repositories: List<GithubLanguageModel>,
     modifier: Modifier = Modifier,
 ) {
+    // This file is not implemented due the absence of a proper Ui
+    // It maybe implemented in the future
     Card(
-        modifier = modifier
-            .padding(10.dp)
-            .fillMaxSize()
+        modifier = modifier.padding(10.dp)
     ) {
+        Text(text = "Most Stared Repository")
         Canvas(
             modifier = Modifier
-
-                .fillMaxWidth()
-                .fillMaxHeight(0.5f)
+                .size(400.dp)
+                .padding(10.dp)
         ) {
             val width = size.width
             val height = size.height
-            val diff = 8.dp
-            var gridXOffset = 0f
-            var gridYOffset = 0f
-            // Drawing the grid x axis
-            for (x in 0..width.toInt() step (diff.toPx().toInt())) {
-                drawLine(
-                    Color.Gray,
-                    Offset(gridXOffset, 0f),
-                    Offset(gridXOffset, size.height),
-                    1.dp.toPx(),
-                    StrokeCap.Round
-                )
-                gridXOffset += diff.toPx()
-            }
-            // Drawing the grid y axis
-            for (y in 0..height.toInt() step (diff.toPx().toInt())) {
-                drawLine(
-                    Color.Gray,
-                    Offset(0f, gridYOffset),
-                    Offset(size.width, gridYOffset),
-                    1.dp.toPx(),
-                    StrokeCap.Round
-                )
-                gridYOffset += diff.toPx()
-            }
-
-            val thickness = width / repositories.size.toFloat()
-            var difference = width / repositories.size.toFloat()
-            // draw chat
+            drawLine(
+                Color.Gray,
+                Offset.Zero,
+                Offset(0f, height),
+                2.dp.toPx(),
+                cap = StrokeCap.Butt,
+            )
+            drawLine(
+                Color.Gray,
+                Offset(0f, size.height),
+                Offset(size.width, size.height),
+                2.dp.toPx(),
+                cap = StrokeCap.Butt
+            )
+            val thickness = (width - 20f) / repositories.size
+            var difference = 10f
             for (repos in repositories) {
                 val barHeight = (repos.starsCount.toFloat() / repositories.maxOf { it.starsCount }
                     .toFloat()) * height
+
                 Log.d("REPO_RUNNER", "$barHeight")
                 drawRect(
                     color = Color(android.graphics.Color.parseColor(repos.languagesModel.colorCode)),
                     topLeft = Offset(difference, height - barHeight),
                     size = Size(thickness, barHeight)
                 )
-                difference += difference
+                difference += thickness
             }
 
         }
-        for (repo in repositories) {
-            Column(
-
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Canvas(
-                        modifier = Modifier.size(20.dp, 10.dp)
-                    ) {
-                        drawRect(
-                            color = Color(android.graphics.Color.parseColor(repo.languagesModel.colorCode))
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = repo.repositoryName)
-
-                }
-            }
-        }
+//        for (repo in repositories) {
+//            Column {
+//                Row(
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Canvas(
+//                        modifier = Modifier.size(20.dp, 10.dp)
+//                    ) {
+//                        drawRect(
+//                            color = Color(android.graphics.Color.parseColor(repo.languagesModel.colorCode))
+//                        )
+//                    }
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    Text(text = repo.repositoryName)
+//                }
+//            }
+//        }
 
     }
 }
+
+

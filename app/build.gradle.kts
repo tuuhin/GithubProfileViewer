@@ -6,6 +6,8 @@ plugins {
     id("com.apollographql.apollo3").version("3.7.4")
 }
 
+
+
 apollo {
     service("service") {
         packageName.set("com.eva")
@@ -35,6 +37,7 @@ android {
     }
 
 
+
     buildTypes {
 
         getByName("release") {
@@ -43,6 +46,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
         }
     }
     compileOptions {
@@ -86,7 +90,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
     //di
     implementation("io.insert-koin:koin-android:3.3.3")
-    implementation ("io.insert-koin:koin-androidx-compose:3.4.2")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.2")
     //coil
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("com.google.accompanist:accompanist-pager:0.29.1-alpha")

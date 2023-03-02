@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.eva.githubprofileviewer.presentation.UserInfoViewModel
-import com.eva.githubprofileviewer.presentation.composables.MostStaredLang
-import com.eva.githubprofileviewer.presentation.composables.TopLanguageGraph
+import com.eva.githubprofileviewer.presentation.composables.graphs.MostStaredLang
+import com.eva.githubprofileviewer.presentation.composables.graphs.TopLanguageGraph
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
