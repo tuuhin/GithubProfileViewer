@@ -8,8 +8,6 @@ import com.eva.githubprofileviewer.domain.repository.GitHubUserInfoRepository
 import com.eva.githubprofileviewer.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.io.IOError
-import java.net.HttpRetryException
 
 class GithubUserRepoImpl(
     private val queries: ApolloQueries
@@ -24,9 +22,6 @@ class GithubUserRepoImpl(
             } catch (e: ApolloException) {
                 e.printStackTrace()
                 emit(Resource.Error(message = e.message ?: "Apollo exception occurred"))
-            } catch (e: HttpRetryException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = e.message ?: "Http retry exception"))
             } catch (e: Exception) {
                 e.printStackTrace()
                 emit(Resource.Error(message = e.message ?: "Unknown Error"))
@@ -47,10 +42,7 @@ class GithubUserRepoImpl(
             } catch (e: ApolloException) {
                 e.printStackTrace()
                 emit(Resource.Error(message = e.message ?: "Apollo exception occurred"))
-            } catch (e: HttpRetryException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = e.message ?: "Http retry exception"))
-            } catch (e: Exception) {
+            }  catch (e: Exception) {
                 e.printStackTrace()
                 emit(Resource.Error(message = e.message ?: "Unknown Error"))
             }
@@ -67,13 +59,7 @@ class GithubUserRepoImpl(
             } catch (e: ApolloException) {
                 e.printStackTrace()
                 emit(Resource.Error(message = e.message ?: "Apollo Error Occurred"))
-            } catch (e: HttpRetryException) {
-                e.printStackTrace()
-                emit(Resource.Error(message = e.message ?: "Http retry error"))
-            } catch (e: IOError) {
-                e.printStackTrace()
-                emit(Resource.Error(message = e.message ?: "IO error occurred"))
-            } catch (e: Exception) {
+            }  catch (e: Exception) {
                 e.printStackTrace()
                 emit(Resource.Error(message = e.message ?: "Unknown error"))
             }

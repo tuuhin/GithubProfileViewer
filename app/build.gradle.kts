@@ -85,6 +85,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.0")
     //apollo
     implementation("com.apollographql.apollo3:apollo-runtime:3.7.4")
+    implementation("com.apollographql.apollo3:apollo-normalized-cache-sqlite:3.7.4")
+    //extra icons
     implementation("androidx.compose.material:material-icons-extended:1.3.1")
     //navigation compose
     implementation("androidx.navigation:navigation-compose:2.5.3")

@@ -5,4 +5,5 @@ object Constants {
     const val DEFAULT_GITHUB_USERNAME: String = "tuuhin"
     const val QUERY_PARAMS: String = "userId"
     const val NOT_FOUND_COLOR: String = "#ffffff"
+    const val APOLLODATABASE_NAME:String = "apollo.db"
 }

@@ -63,11 +63,8 @@ class UserInfoViewModel(
 
     fun rearrangeRepository(arrangement: RepositoryArrangement) {
         if (repositoryState.value.content != null) {
-            repositoryState.value = repositoryState.value.copy(
-                content = ReArrangeRepositoryUseCase(
-                    repositories = repositoryState.value.content!!
-                ).invoke(arrangement)
-            )
+            val useCase = ReArrangeRepositoryUseCase(repositories = repositoryState.value.content!!)
+            repositoryState.value = repositoryState.value.copy(content = useCase(arrangement))
         }
     }
 

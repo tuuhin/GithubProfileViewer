@@ -1,6 +1,8 @@
 package com.eva.githubprofileviewer.di
 
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.cache.normalized.normalizedCache
+import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
 import com.eva.githubprofileviewer.data.ApolloQueries
 import com.eva.githubprofileviewer.data.ApolloQueriesImpl
@@ -20,11 +22,11 @@ val appModule = module {
             .addInterceptor(AuthorizationInterceptor())
             .build()
     }
-
     single {
         ApolloClient.Builder()
             .serverUrl(Constants.GITHUB_URL)
             .okHttpClient(get())
+            .normalizedCache(SqlNormalizedCacheFactory(Constants.APOLLODATABASE_NAME))
             .build()
     }
 
@@ -36,6 +38,6 @@ val appModule = module {
         GithubUserRepoImpl(get())
     }
     viewModel {
-        UserInfoViewModel(get(),get())
+        UserInfoViewModel(get(), get())
     }
 }

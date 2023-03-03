@@ -5,8 +5,8 @@ import com.eva.githubprofileviewer.domain.models.LanguageGraphModel
 import com.eva.githubprofileviewer.domain.models.RepositoryLanguagesModel
 import com.eva.githubprofileviewer.domain.models.StaredLanguageGraphModel
 
-
 fun List<GithubLanguageModel>.starsGraphData(): List<StaredLanguageGraphModel> {
+
     val starMap: MutableMap<RepositoryLanguagesModel, Int> = mutableMapOf()
     forEach { model ->
         if (model.languagesModel.name.isNotEmpty()) {
@@ -15,11 +15,13 @@ fun List<GithubLanguageModel>.starsGraphData(): List<StaredLanguageGraphModel> {
             starMap[language] = prev + model.starsCount
         }
     }
+    val total = starMap.values.sumOf { it }.toFloat()
+
     return starMap.map { entry ->
         StaredLanguageGraphModel(
             entry.key,
             entry.value,
-            percentage = entry.value.toFloat() / (starMap.values.sumOf { it }).toFloat()
+            percentage = entry.value.toFloat() / total
         )
     }
 }
@@ -34,11 +36,12 @@ fun List<GithubLanguageModel>.languageGraphData(): List<LanguageGraphModel> {
         }
 
     }
+    val total = (languageMap.values.sumOf { it }).toFloat()
     return languageMap.map { entry ->
         LanguageGraphModel(
             entry.key,
             entry.value,
-            percentage = entry.value.toFloat() / (languageMap.values.sumOf { it }).toFloat()
+            percentage = entry.value.toFloat() / total
         )
     }
 }
