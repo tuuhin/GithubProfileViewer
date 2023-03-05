@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.GitHubProfileViewer" parent="android:Theme.Material.Light.NoActionBar" >
+    <style name="Theme.App.Starting" parent="Theme.GitHubProfileViewer">
         <item name="windowSplashScreenBackground">#ffffff</item>
-        <item name="android:windowBackground">#ffffff</item>
-        <item name="android:previewImage">@drawable/octocat</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/octocat</item>
         <item name="windowSplashScreenAnimationDuration">200</item>
     </style>

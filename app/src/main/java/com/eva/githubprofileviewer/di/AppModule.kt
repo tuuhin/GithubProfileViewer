@@ -1,6 +1,8 @@
 package com.eva.githubprofileviewer.di
 
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.cache.normalized.FetchPolicy
+import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
@@ -27,6 +29,7 @@ val appModule = module {
             .serverUrl(Constants.GITHUB_URL)
             .okHttpClient(get())
             .normalizedCache(SqlNormalizedCacheFactory(Constants.APOLLODATABASE_NAME))
+            .fetchPolicy(FetchPolicy.NetworkFirst)
             .build()
     }
 

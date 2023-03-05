@@ -37,7 +37,6 @@ android {
     }
 
 
-
     buildTypes {
 
         getByName("release") {
@@ -96,5 +95,7 @@ dependencies {
     //coil
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("com.google.accompanist:accompanist-pager:0.29.1-alpha")
+    //splash
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
 }
