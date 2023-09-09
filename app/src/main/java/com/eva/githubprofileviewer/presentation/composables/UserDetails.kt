@@ -79,7 +79,6 @@ fun UserDetails(
                     text = model.readableCreatedAt(),
                     style = MaterialTheme.typography.bodyMedium
                 )
-
             }
             model.location?.let { location ->
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -99,5 +98,3 @@ fun UserDetails(
         AssociatedData(model = model)
     }
 }
-
-

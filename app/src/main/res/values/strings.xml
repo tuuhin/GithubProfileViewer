@@ -2,4 +2,11 @@
     <string name="app_name">GitHub Profile Viewer</string>
     <string name="search">Search Icon</string>
     <string name="octocat">OctoCat Image</string>
+    <string name="app_name_title">GitHub Profile Viewer</string>
+    <string name="repositories">Repositories</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="enter_username">Enter the username to search for</string>
+    <string name="github_username">GitHub Username</string>
+    <string name="top_repo">Top Repositories</string>
 </resources>

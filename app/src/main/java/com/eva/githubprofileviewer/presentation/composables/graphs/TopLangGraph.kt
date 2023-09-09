@@ -1,7 +1,6 @@
 package com.eva.githubprofileviewer.presentation.composables.graphs
 
 import androidx.compose.foundation.BorderStroke
-import android.graphics.Color as ParserColor
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.eva.githubprofileviewer.domain.models.LanguageGraphModel
 import com.eva.githubprofileviewer.presentation.composables.LanguageTags
+import android.graphics.Color as C
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopLanguageGraph(
     languages: List<LanguageGraphModel>,
@@ -43,7 +42,7 @@ fun TopLanguageGraph(
                 var lastAngle = 270f
                 for (language in languages) {
                     drawArc(
-                        color = Color(ParserColor.parseColor(language.languagesModel.colorCode)),
+                        color = Color(C.parseColor(language.languagesModel.colorCode)),
                         startAngle = lastAngle,
                         sweepAngle = language.percentage * 360,
                         useCenter = true,

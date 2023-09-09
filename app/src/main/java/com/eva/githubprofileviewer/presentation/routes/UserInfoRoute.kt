@@ -1,73 +1,75 @@
 package com.eva.githubprofileviewer.presentation.routes
 
-
-import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.eva.githubprofileviewer.presentation.UiEvent
 import com.eva.githubprofileviewer.presentation.UserInfoViewModel
-import com.eva.githubprofileviewer.presentation.UserInformation
-import com.eva.githubprofileviewer.presentation.screens.BottomNavBar
+import com.eva.githubprofileviewer.presentation.composables.BottomNavBar
 import com.eva.githubprofileviewer.presentation.screens.UserGraphInformation
+import com.eva.githubprofileviewer.presentation.screens.UserInformation
 import com.eva.githubprofileviewer.presentation.screens.UserRepositoryInformation
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.flow.collectLatest
+import com.eva.githubprofileviewer.presentation.util.LocalSnackBarHostState
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserInfoRoute(
-    userId: String,
-    modifier: Modifier = Modifier,
-    userInfoViewModel: UserInfoViewModel = koinViewModel()
+	modifier: Modifier = Modifier,
+	userInfoViewModel: UserInfoViewModel = koinViewModel(),
+	snackBarHostState: SnackbarHostState = LocalSnackBarHostState.current
 ) {
+	val scope = rememberCoroutineScope()
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val pager = rememberPagerState()
+	val pager = rememberPagerState(
+		initialPage = 0,
+		initialPageOffsetFraction = 0f,
+		pageCount = { 3 }
+	)
 
-    LaunchedEffect(true) {
-        userInfoViewModel.eventFlow.collectLatest { event ->
-            Log.d("EVENT_FLOW", event.text)
-            when (event) {
-                is UiEvent.ShowSnackBar -> {
-                    snackbarHostState.showSnackbar(event.text)
-                }
-            }
-        }
-    }
-    Scaffold(
-        topBar = {
-            SmallTopAppBar(
-                title = {
-                    Text(
-                        text = userId,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-        bottomBar = {
-            BottomNavBar(pagerState = pager)
-        }
-    ) { padding ->
-        HorizontalPager(
-            state = pager,
-            count = 3,
-            modifier = modifier.padding(padding)
-        ) { idx ->
-            when (idx) {
-                0 -> UserInformation()
-                1 -> UserGraphInformation()
-                2 -> UserRepositoryInformation()
-            }
-        }
-    }
+	LaunchedEffect(Unit) {
+		userInfoViewModel.eventFlow.collect { event ->
+			when (event) {
+				is UiEvent.ShowSnackBar -> {
+					snackBarHostState.showSnackbar(event.text)
+				}
+			}
+		}
+	}
+	Scaffold(
+		snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+		bottomBar = {
+			BottomNavBar(
+				currentPage = pager.currentPage,
+				onNavigationItemSelect = { idx ->
+					scope.launch { pager.animateScrollToPage(idx) }
+				}
+			)
+		}
+	) { padding ->
+		HorizontalPager(
+			state = pager,
+			modifier = modifier.padding(padding)
+		) { idx ->
+			when (idx) {
+				0 -> UserInformation(
+					content = userInfoViewModel.userInfoState.value
+				)
+
+				1 -> UserGraphInformation(
+					content = userInfoViewModel.graphState.value
+				)
+
+				2 -> UserRepositoryInformation(
+					content = userInfoViewModel.repositoryState.value,
+					onReArrange = userInfoViewModel::rearrangeRepository
+				)
+			}
+		}
+	}
 }

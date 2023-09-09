@@ -10,33 +10,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.eva.githubprofileviewer.presentation.UserInfoViewModel
+import com.eva.githubprofileviewer.domain.models.GithubGraphDataModel
+import com.eva.githubprofileviewer.presentation.ShowContent
 import com.eva.githubprofileviewer.presentation.composables.graphs.MostStaredLang
 import com.eva.githubprofileviewer.presentation.composables.graphs.TopLanguageGraph
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserGraphInformation(
     modifier: Modifier = Modifier,
-    userInfoViewModel: UserInfoViewModel = koinViewModel()
+    content: ShowContent<GithubGraphDataModel>
 ) {
-    val state = userInfoViewModel.graphState.value
-
-    if (state.isLoading) {
-        Box(
+    when {
+        content.isLoading -> Box(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }
-    } else {
-        state.content?.let {
+
+        else -> content.content?.let { model ->
             LazyColumn(
                 modifier = Modifier.padding(4.dp)
             ) {
                 item {
                     TopLanguageGraph(
-                        languages = state.content.topLangGraphData,
+                        languages = model.topLangGraphData,
                         modifier = Modifier
                             .height(400.dp)
                             .padding(0.dp, 2.dp)
@@ -44,7 +42,7 @@ fun UserGraphInformation(
                 }
                 item {
                     MostStaredLang(
-                        languages = state.content.starsPerLangGraphData,
+                        languages = model.starsPerLangGraphData,
                         modifier = Modifier
                             .height(400.dp)
                             .padding(0.dp, 2.dp)
@@ -52,7 +50,5 @@ fun UserGraphInformation(
                 }
             }
         }
-
     }
 }
-

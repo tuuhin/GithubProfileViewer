@@ -1,29 +1,20 @@
-package com.eva.githubprofileviewer.presentation.screens
+package com.eva.githubprofileviewer.presentation.composables
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
-import kotlinx.coroutines.launch
+import com.eva.githubprofileviewer.presentation.util.InformationTabs
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun BottomNavBar(
-    pagerState: PagerState,
+    currentPage: Int,
+    onNavigationItemSelect: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scope = rememberCoroutineScope()
-
     NavigationBar(modifier = modifier) {
         NavigationBarItem(
-            selected = pagerState.currentPage == 0,
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(0)
-                }
-            },
+            selected = currentPage == 0,
+            onClick = { onNavigationItemSelect(0) },
             label = { Text(text = InformationTabs.UserInformation.label) },
             icon = {
                 Icon(
@@ -34,12 +25,8 @@ fun BottomNavBar(
 
         )
         NavigationBarItem(
-            selected = pagerState.currentPage == 1,
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(1)
-                }
-            },
+            selected = currentPage == 1,
+            onClick = { onNavigationItemSelect(1) },
             label = { Text(text = InformationTabs.GraphInformation.label) },
             icon = {
                 Icon(
@@ -50,12 +37,8 @@ fun BottomNavBar(
 
         )
         NavigationBarItem(
-            selected = pagerState.currentPage == 2,
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(2)
-                }
-            },
+            selected = currentPage == 2,
+            onClick = { onNavigationItemSelect(2) },
             label = { Text(text = InformationTabs.RepositoryInformation.label) },
             icon = {
                 Icon(

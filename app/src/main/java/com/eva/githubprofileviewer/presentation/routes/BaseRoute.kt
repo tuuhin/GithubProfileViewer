@@ -1,7 +1,9 @@
 package com.eva.githubprofileviewer.presentation.routes
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -12,90 +14,109 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.eva.githubprofileviewer.R
-import kotlinx.coroutines.launch
+import com.eva.githubprofileviewer.presentation.util.LocalSnackBarHostState
+import com.eva.githubprofileviewer.ui.theme.GitHubProfileViewerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseRoute(
-    navController: NavController,
+    onNavigate: (String) -> Unit,
     modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState = LocalSnackBarHostState.current
 ) {
     var username by remember { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
-    val state = remember { SnackbarHostState() }
+
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = state) },
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
-            SmallTopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Github Profile Viewer",
-                        color = MaterialTheme.colorScheme.primary
+                        text = stringResource(id = R.string.app_name_title),
+                        style = MaterialTheme.typography.titleLarge
                     )
                 },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    when (username) {
-                        "" -> scope.launch {
-                            state.showSnackbar("Cannot have a blank username.Please provide a correct one")
-                        }
-                        else -> {
-                            val userId = username.trim()
-                            navController.navigate(Routes.UserInfoRoute(userId).name)
-                        }
-                    }
-                }
+            ExtendedFloatingActionButton(
+                onClick = { onNavigate(username) },
+                elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 2.dp)
             ) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = stringResource(R.string.search)
                 )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = "Search")
             }
         }
-
-    ) {
+    ) { scPadding ->
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(scPadding),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
+            Spacer(modifier = Modifier.height(20.dp))
             Image(
                 painter = painterResource(R.drawable.octocat),
-                contentDescription = stringResource(R.string.octocat),
-                modifier = Modifier.padding(0.dp, 20.dp)
+                contentDescription = stringResource(R.string.octocat)
             )
-            Text(text = "Enter the username to search for", textAlign = TextAlign.Center)
-            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.enter_username),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(vertical = 10.dp)
+            )
             TextField(
                 value = username,
-                onValueChange = { name ->
-                    username = name
-                },
+                onValueChange = { name -> username = name },
+                textStyle = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    focusedLabelColor = MaterialTheme.colorScheme.secondary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.secondary
                 ),
-                label = { Text("GitHub Username") },
+                shape = MaterialTheme.shapes.medium,
+                label = {
+                    Text(
+                        text = stringResource(id = R.string.github_username),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
-                    capitalization = KeyboardCapitalization.None
+                    capitalization = KeyboardCapitalization.None,
+                    imeAction = ImeAction.Search
                 ),
+                keyboardActions = KeyboardActions(
+                    onSearch = { onNavigate(username) }
+                )
             )
         }
     }
+}
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Composable
+fun BaseRoutePreview() {
+    GitHubProfileViewerTheme {
+        BaseRoute(onNavigate = {})
+    }
 }

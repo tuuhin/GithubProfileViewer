@@ -1,4 +1,4 @@
-package com.eva.githubprofileviewer.presentation.screens
+package com.eva.githubprofileviewer.presentation.util
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
